@@ -1,0 +1,17 @@
+{
+  "name": "knex-tracker",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "repository": "git@github.com:Knex-API/knex-tracker.git",
+  "author": "Alexander Pavlovich <alexpimt1917@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "memfs": "^3.2.0",
+    "mocha": "^8.2.1",
+    "mock-require": "^3.0.3"
+  }
+}
