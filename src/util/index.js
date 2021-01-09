@@ -20,12 +20,14 @@ var proxyDebug = debug('knex-tracker:makeFunctionProxyHandler');
 function makeFunctionProxyHandler(context, handler) {
   proxyDebug('creating');
   var target = () => {};
-  var value = context.constructor.name;
-  Object.defineProperty(target, 'name', { value });
-  proxyDebug('creating for target name', value);
+
+  Object.defineProperty(target, 'name', { value: context.constructor.name });
+  proxyDebug('creating for target name', context.constructor.name);
+
   handler = handler || context._proxyHandler.bind(context);
   proxyDebug('creating with handler', handler);
-  return new Proxy(target, {
+
+  context.proxy = new Proxy(target, {
     apply: function(target, thisArgument, args) {
       proxyDebug('applying with arguments', arguments);
       var retVal = handler(...args);
@@ -35,8 +37,14 @@ function makeFunctionProxyHandler(context, handler) {
       // handler(...args);
       // return this;
     },
+    getPrototypeOf: t => Object.getPrototypeOf(context),
     get: (target, prop) => {
-      proxyDebug('getting from', target, 'with', prop);
+      proxyDebug('getting prop', prop, 'from', target);
+      if (prop === '__target__') {
+        proxyDebug('found: proxy target requested, returning', context);
+        return context;
+      }
+
       if (prop in context) {
         proxyDebug('found: true');
         return context[prop];
@@ -47,6 +55,8 @@ function makeFunctionProxyHandler(context, handler) {
     },
     getPrototypeOf: t => Object.getPrototypeOf(context),
   });
+
+  return context.proxy;
 }
 
 module.exports = {

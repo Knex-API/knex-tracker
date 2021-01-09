@@ -12,11 +12,7 @@ function DefinitionTracker(initialMethod) {
   this.initialMethod = initialMethod;
   this.calls = [];
 
-
-  debug('making proxy for', this);
-  this.myProxy = utils.makeFunctionProxyHandler(this);
-  debug('making proxy done:', this.myProxy);
-  return this.myProxy;
+  return utils.makeFunctionProxyHandler(this);
 }
 
 DefinitionTracker.prototype._proxyHandler = function() {
@@ -24,11 +20,12 @@ DefinitionTracker.prototype._proxyHandler = function() {
   // this.calls.push({ ...arguments });
   this.calls.push( ...arguments );
   // return this;
-  return this.myProxy;
+  return this.proxy;
 };
 
-// DefinitionTracker.prototype._trackCall = function() {
-// };
+DefinitionTracker.prototype[util.inspect.custom] = function() {
+  return this;
+};
 
 module.exports = {
   DefinitionTracker,

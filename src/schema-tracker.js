@@ -8,6 +8,7 @@ function SchemaTracker() {
 
   return new Proxy(this, {
     get: (target, prop) => {
+      console.log('getting', prop, 'from', target, 'and its:', !schemaBuilder.has(prop));
       if (!schemaBuilder.has(prop)) {
         return target[prop];
       } else {
