@@ -26,5 +26,21 @@ describe('knex-tracker test', () => {
       var result = knexTrackerWoNew();
       expect(result).to.be.instanceOf(QueryTracker);
     });
+
+    it('should track knex-tracker query trackers', () => {
+      var db = new KnexTracker();
+      var query = db.table();
+      expect(db.trackedQueries).to.be.ok;
+      expect(db.trackedQueries).to.have.length(1);
+      expect(db.trackedQueries).to.have.property(0, query);
+    });
+
+    it('should track knex-tracker schema trackers', () => {
+      var db = new KnexTracker();
+      var ddl = db.schema;
+      expect(db.trackedDefs).to.be.ok;
+      expect(db.trackedDefs).to.have.length(1);
+      expect(db.trackedDefs).to.have.property(0, ddl);
+    });
   });
 });
