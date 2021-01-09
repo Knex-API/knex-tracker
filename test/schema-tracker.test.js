@@ -7,5 +7,14 @@ describe('schema-tracker test', () => {
     it('should create a schema-tracker', () => {
       new SchemaTracker();
     });
+
+    it.only('should create a schema-tracker', () => {
+      var schema = new SchemaTracker();
+      var ddl = schema.createTable/*('someTable');*/
+      console.log(ddl);
+      var defs = schema.definitions/*('someTable');*/
+      console.log(defs);
+      expect(defs).to.be.an('array');
+    });
   });
 });

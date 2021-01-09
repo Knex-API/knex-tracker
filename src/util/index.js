@@ -1,3 +1,5 @@
+var publicApis = require('./publicApis');
+
 function parseYyyymmddhhmmss(yyyymmddhhmmss) {
   var yyyy = parseInt(yyyymmddhhmmss.substring(0, 4), 10);
   var MM = parseInt(yyyymmddhhmmss.substring(4, 4 + 2), 10);
@@ -14,4 +16,5 @@ function parseYyyymmddhhmmss(yyyymmddhhmmss) {
 
 module.exports = {
   parseYyyymmddhhmmss,
+  publicApis,
 };
