@@ -10,11 +10,15 @@ describe('schema-tracker test', () => {
 
     it.only('should create a schema-tracker', () => {
       var schema = new SchemaTracker();
-      var ddl = schema.createTable/*('someTable');*/
+      var ddl = schema.createTable('someTable');
+      // console.log(ddl);
+      // console.log('schema.definitions', schema.definitions);
+      // console.log(ddl.withSchema());
+      console.log(ddl.withSchema);
       console.log(ddl);
-      var defs = schema.definitions/*('someTable');*/
-      console.log(defs);
-      expect(defs).to.be.an('array');
+      // expect(defs).to.be.an('array');
+      // console.log(defs.calls);
+      // console.log('defs', ddl, defs[0]);
     });
   });
 });

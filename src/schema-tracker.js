@@ -1,6 +1,8 @@
 var util = require('./util');
 var { schemaBuilder } = util.publicApis;
 
+var { DefinitionTracker } = require('./definition-tracker');
+
 function SchemaTracker() {
   this.definitions = [];
 
@@ -16,7 +18,8 @@ function SchemaTracker() {
 }
 
 SchemaTracker.prototype._trackDef = function(prop) {
-  var def = { method: prop };
+  // var def = { method: prop };
+  var def = new DefinitionTracker(prop);
   this.definitions.push(def);
   return def;
 };

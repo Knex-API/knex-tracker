@@ -1,3 +1,4 @@
+var debug = require('debug');
 var publicApis = require('./publicApis');
 
 function parseYyyymmddhhmmss(yyyymmddhhmmss) {
@@ -14,7 +15,42 @@ function parseYyyymmddhhmmss(yyyymmddhhmmss) {
   return new Date(yyyy, MM, dd, hh, mm, ss, 0);
 }
 
+var proxyDebug = debug('knex-tracker:makeFunctionProxyHandler');
+
+function makeFunctionProxyHandler(context, handler) {
+  proxyDebug('creating');
+  var target = () => {};
+  var value = context.constructor.name;
+  Object.defineProperty(target, 'name', { value });
+  proxyDebug('creating for target name', value);
+  handler = handler || context._proxyHandler.bind(context);
+  proxyDebug('creating with handler', handler);
+  return new Proxy(target, {
+    apply: function(target, thisArgument, args) {
+      proxyDebug('applying with arguments', arguments);
+      var retVal = handler(...args);
+      proxyDebug('applying returning', retVal);
+      return retVal;
+      // return handler(...args);
+      // handler(...args);
+      // return this;
+    },
+    get: (target, prop) => {
+      proxyDebug('getting from', target, 'with', prop);
+      if (prop in context) {
+        proxyDebug('found: true');
+        return context[prop];
+      }
+
+      proxyDebug('found: false (returning target/self)');
+      return target;
+    },
+    getPrototypeOf: t => Object.getPrototypeOf(context),
+  });
+}
+
 module.exports = {
   parseYyyymmddhhmmss,
+  makeFunctionProxyHandler,
   publicApis,
 };
